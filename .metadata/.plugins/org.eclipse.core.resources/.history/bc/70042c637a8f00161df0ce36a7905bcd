@@ -1,0 +1,97 @@
+package Receive;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.mathworks.toolbox.javabuilder.MWException;
+
+import Ps.Class1;
+
+public class SocketTransmit {
+
+	private final static Logger logger = Logger.getLogger(SocketTransmit.class.getName());
+	  
+	  public static void main(String[] args)
+	  {
+		  t9.start();
+	  }
+	    
+	  private static String receiveData(SocketChannel socketChannel) throws IOException {
+	    String string = null;
+	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    ByteBuffer buffer = ByteBuffer.allocate(1024);
+	    
+	    try {
+	      byte[] bytes;
+	      int size = 0;
+	      while ((size = socketChannel.read(buffer)) >= 0) {
+	        buffer.flip();
+	        bytes = new byte[size];
+	        buffer.get(bytes);
+	        baos.write(bytes);
+	        buffer.clear();
+	      }
+	      bytes = baos.toByteArray();
+	      string = new String(bytes);
+	    }catch(Exception ex){
+	      logger.log(Level.SEVERE, "7", ex);
+	    }finally {
+	      try {
+	        baos.close();
+	      } catch(Exception ex) {
+	        logger.log(Level.SEVERE, "8", ex);
+	      }
+	    }
+	    return string;
+	  }
+
+	  private static void receiveFile(SocketChannel socketChannel, File file) throws IOException {
+	    FileOutputStream fos = null;
+	    FileChannel channel = null;
+	    
+	    try {
+	      fos = new FileOutputStream(file);
+	      channel = fos.getChannel();
+	      ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+
+	      int size = 0;
+	      while ((size = socketChannel.read(buffer)) != -1) {
+	        buffer.flip();
+	        if (size > 0) {
+	          buffer.limit(size);
+	          channel.write(buffer);
+	          buffer.clear();
+	        }
+	      }
+	    }catch(Exception ex){
+	      logger.log(Level.SEVERE, "9", ex);
+	    } finally {
+	      try {
+	        channel.close();
+	      } catch(Exception ex) {
+	        logger.log(Level.SEVERE, "10", ex);
+	      }
+	      try {
+	        fos.close();
+	      } catch(Exception ex) {
+	        logger.log(Level.SEVERE, "11", ex);
+	      }
+	    }
+	  }
+
+
+}
