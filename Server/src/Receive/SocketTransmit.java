@@ -75,7 +75,7 @@ public class SocketTransmit {
 					        	  receiveFile(socketChannel, new File("src/srcdata/patientAndDoctor.txt"));
 					        	  fileFlag = 1;
 					        	  SplitFile.SplitFileToDifferentDir();
-//					        	  JDBC.readTxtFile("./src/srcdata");
+					        	  JDBC.readTxtFile("./src/srcdata");
 					        	  logger.log(Level.INFO, "patientAndDoctor.txtΩ” ’ÕÍ±œ");				        		  
 				        	  }
 				          }catch(Exception ex){

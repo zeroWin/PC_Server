@@ -32,7 +32,7 @@ public class JDBC {
 	public JDBC(String user, String pass) {
 		this.user = user;
 		this.pass = pass;
-		this.url = "jdbc:oracle:thin:@10.108.170.122:1521:orcl"; // url
+		this.url = "jdbc:oracle:thin:@10.108.170.39:1521:db1"; // url
 	}
 
 	/**
@@ -158,10 +158,10 @@ public class JDBC {
 	}
 
 	public static void readTxtFile(String filePath) {
-		JDBC jDBC = new JDBC("scott", "xq1993.");
+		JDBC jDBC = new JDBC("hospital", "hospital");
 		try {
                
-			String encoding = "GBK";
+			String encoding = "UTF-8";
 			File file = new File(filePath);
 			File[] numOfDic = file.listFiles();
 			for (File e : numOfDic) // 遍历路径下所有文件及文件夹
@@ -201,10 +201,10 @@ public class JDBC {
 						// String insert = "insert into PATIENTDATA
 						// values("+"\""+patientData[0]+"\""+","+"\""+name+"\""+","+"to_date("+patientData[2]+","+"'yyyy-mm-dd
 						// hh24:mi:ss')"+","+"\""+patientData[1]+"\""+","+"\""+patientUrl+"\""+")";
-						String insert_patientData = "insert into PATIENTDATA values(" +"\'" + patientData[0] + "\'"
+						String insert_patientData = "insert into PATIENTDATA (ID,PATIENT_ID,DEVICE_TYPE,ACQUISITION_TIME,DOCTOR_ID,ORIGINAL_DATA) values("+"\'"+String.valueOf(count)+"\'"+ ","+"\'" + patientData[0] + "\'"
 								+ "," + "\'" + name + "\'" + "," + "to_date(" + "\'" + patientData[2] + "\'" + ","
 								+ "'yyyy-mm-dd hh24:mi:ss')" + "," + "\'" + patientData[1] + "\'" + "," + "\'"
-								+ destUrl + "\'" + "," +"\'"+String.valueOf(count)+"\'"+")";
+								+ destUrl + "\'" +")";
 						// String insert_tst = "insert into PATIENTDATA
 						// values('1','23',to_date('2011-2-28
 						// 15~42~56','yyyy-mm-dd hh24:mi:ss'),'23','56')";
@@ -229,10 +229,10 @@ public class JDBC {
 						if (Flag.equals("1") == true) // 如果是医生信息就写入医生表
 						{
 							// System.out.print(Flag.equals("1"));
-							String select_DocID = "select * from OPERATOR where OPERATORID=" + patientAndDocinfo[1];
+							String select_DocID = "select * from OPERATOR where OPERATORID=" + "\'"+patientAndDocinfo[1]+"\'";
 							ResultSet get_DocID = jDBC.selectSql(select_DocID);
 							if (!(get_DocID.next())) {
-								String insert_DocInfo = "insert into OPERATOR (OPERATORID,SHOWNAME,DEPARTMENT,WORK_UNIT,LEVEL1,PHONE,EMAIL) values("
+								String insert_DocInfo = "insert into OPERATOR (OPERATORID,SHOWNAME,DEPARTMENT,WORK_UNIT,\"LEVEL\",PHONE,EMAIL) values("
 										+ "\'" + patientAndDocinfo[1] + "\'" + "," + "\'" + patientAndDocinfo[2] + "\'"
 										+ "," + "\'" + patientAndDocinfo[3] + "\'" + "," + "\'" + patientAndDocinfo[4]
 										+ "\'" + "," + "\'" + patientAndDocinfo[5] + "\'" + "," + "\'"
@@ -242,14 +242,14 @@ public class JDBC {
 						} else if (Flag.equals("2") == true) // 病人
 						{
 
-							String select_PatiID = "select *from PATIENTINFO where PATIENT_ID = " + "\'"
+							String select_PatiID = "select *from PATIENTINFO where OPERATORID = " + "\'"
 									+ patientAndDocinfo[1] + "\'";
 							ResultSet get_PatientID = jDBC.selectSql(select_PatiID);
 							// jDBC.printRs(jDBC.selectSql(select_PatiID)); //
 							// 打印表信息
 							if (!get_PatientID.next()) // 当前数据库没有该病人信息主键ID
 							{
-								String insert_patientInfo = "insert into PATIENTINFO values(" + "\'"
+								String insert_patientInfo = "insert into PATIENTINFO(OPERATORID,SHOWNAME,BIRTHDAY,ID_NUMBER,ADRESS,PHONE,EMAIL,CONTACT_NAME,RELATIONSHIP,CONTACT_PHONE,CONTACT_EMAIL) values(" + "\'"
 										+ patientAndDocinfo[1] + "\'" + "," + "\'" + patientAndDocinfo[2] + "\'" + ","
 										+ "to_date(" + "\'" + patientAndDocinfo[3] + "\'" + ","
 										+ "'yyyy-mm-dd hh24:mi:ss')" + "," + "\'" + patientAndDocinfo[4] + "\'" + ","
