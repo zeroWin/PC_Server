@@ -31,7 +31,9 @@ public class SplitFile {
  				String[] arrInfoSplit = lineInfo.split(",");
  				String fileName = arrInfoSplit[3]+","+arrInfoSplit[4]+","+arrInfoSplit[5]+".txt";
 				switch(arrInfoSplit[1]) { // 根据标识符决定写入的文件
+				case "161":fileWrite = new File("src/srcdata/Tempr/" + fileName); break;// 体温
 				case "162":fileWrite = new File("src/srcdata/ECG/" + fileName); break;// 心电
+				case "163":fileWrite = new File("src/srcdata/BP/" + fileName); break;// 血压
 				case "166":fileWrite = new File("src/srcdata/SpO2/"+ fileName); break;// 血氧
 				default:lineInfo = inInfo.readLine();continue;	// 直接进入下次读取
 				}

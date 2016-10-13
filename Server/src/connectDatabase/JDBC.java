@@ -189,25 +189,13 @@ public class JDBC {
 						ResultSet rs1 = jDBC.selectSql("select count(*) from PATIENTDATA");
 						rs1.next();
 						count=rs1.getInt(1);
-						//ResultSetMetaData rsmd1 = rs1.getMetaData(); // 该对象包含当前表的列信息，数据，数据类型
-//						while(rs1.next())
-//						{
-//							count+=1;
-//							System.out.println("rowcount: "+String.valueOf(count));
-//						}
 						System.out.print(count);
 						
-						//int rowNum = rsmd1.get;// 数据集的列数
-						// String insert = "insert into PATIENTDATA
-						// values("+"\""+patientData[0]+"\""+","+"\""+name+"\""+","+"to_date("+patientData[2]+","+"'yyyy-mm-dd
-						// hh24:mi:ss')"+","+"\""+patientData[1]+"\""+","+"\""+patientUrl+"\""+")";
+
 						String insert_patientData = "insert into PATIENTDATA (ID,PATIENT_ID,DEVICE_TYPE,ACQUISITION_TIME,DOCTOR_ID,ORIGINAL_DATA) values("+"\'"+String.valueOf(count)+"\'"+ ","+"\'" + patientData[0] + "\'"
 								+ "," + "\'" + name + "\'" + "," + "to_date(" + "\'" + patientData[2] + "\'" + ","
 								+ "'yyyy-mm-dd hh24:mi:ss')" + "," + "\'" + patientData[1] + "\'" + "," + "\'"
 								+ destUrl + "\'" +")";
-						// String insert_tst = "insert into PATIENTDATA
-						// values('1','23',to_date('2011-2-28
-						// 15~42~56','yyyy-mm-dd hh24:mi:ss'),'23','56')";
 						jDBC.insert(insert_patientData);// 插入成功
 						patientData = null;// 清空buff接收下次
 					}
