@@ -19,9 +19,7 @@ import com.mathworks.toolbox.javabuilder.MWException;
 
 import fileHandle.SplitFile;
 import connectDatabase.JDBC;
-import Ps.*;
-import HRVparameters.*;
-import SpO2_Val_acVdc.*;
+
 
 
 public class SocketTransmit {

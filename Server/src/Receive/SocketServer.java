@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 
 import com.mathworks.toolbox.javabuilder.MWException;
 
-import Ps.Class1;
 
 public class SocketServer {
 

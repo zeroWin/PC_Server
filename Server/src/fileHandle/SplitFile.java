@@ -7,9 +7,6 @@ import java.io.IOException;
 
 import com.mathworks.toolbox.javabuilder.MWException;
 
-import HRVparameters.*;
-import SpO2_Val_acVdc.*;
-
 public class SplitFile {
 	
 	/* 
@@ -63,6 +60,11 @@ public class SplitFile {
        				SpO2ChangeDataOrder(fileWrite,fileName);
        				//使用算法处理文件
        				SpO2Algorithm(fileName);
+       			}
+       			
+       			if(arrInfoSplit[1].equals("162")) // 如果是心电，进一步处理
+       			{
+       				
        			}
  				// 读取下一行数据
  				lineInfo = inInfo.readLine();
@@ -142,14 +144,14 @@ public class SplitFile {
 		String fileAlgorithmPath = "src/srcdata/SpO2/algorithm_" + fileName;
 		fileAlgorithmPath = fileAlgorithmPath.replace("/", "\\");
 		
-		HRVparameters.Class1 c1 = new HRVparameters.Class1();
-		SpO2_Val_acVdc.Class1 c2 = new SpO2_Val_acVdc.Class1();
+		SpO2parameters.Class1 c1 = new SpO2parameters.Class1();
 		
 		// 得到了算法的结果
 		Object[] result_HRVparameters= null;
 		Object[] result_SpO2= null;
 		result_HRVparameters = c1.HRVparameters(11,fileAlgorithmPath);
-		result_SpO2 = c2.SpO2_Val_acVdc(1,fileAlgorithmPath);
+		result_SpO2 = c1.SpO2_Val_acVdc(1,fileAlgorithmPath);
+		
 		
 		// 将结果写入到文件,用逗号隔开，依次为
 		// SpO2,HI_RATE,LO_RATE,MEAN_RATE,SDNN,R_MSSD,LF,HF,TP, lfnorm ,hfnorm,lf_hf
@@ -162,7 +164,7 @@ public class SplitFile {
 		
 		for(int i = 0; i < 11; ++i)
 		{
-			fos.write(result_HRVparameters.toString().getBytes());
+			fos.write(result_HRVparameters[i].toString().getBytes());
 			if(i != 10)
 				fos.write(",".getBytes());
 		}
