@@ -5,12 +5,17 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
+import com.mathworks.toolbox.javabuilder.MWException;
+
+import HRVparameters.*;
+import SpO2_Val_acVdc.*;
+
 public class SplitFile {
 	
 	/* 
 	 * 解析measdatainfo.txt文件，将measdata.txt分割到不同的文件中
 	 */
-	public static void SplitFileToDifferentDir() throws IOException
+	public static void SplitFileToDifferentDir() throws IOException, MWException
 	{
 		File fileReadInfo = new File("src/srcdata/measdatainfo.txt");
 		File fileReadData = new File("src/srcdata/measdata.txt");
@@ -34,7 +39,7 @@ public class SplitFile {
 				case "161":fileWrite = new File("src/srcdata/Tempr/" + fileName); break;// 体温
 				case "162":fileWrite = new File("src/srcdata/ECG/" + fileName); break;// 心电
 				case "163":fileWrite = new File("src/srcdata/BP/" + fileName); break;// 血压
-				case "166":fileWrite = new File("src/srcdata/SpO2/"+ fileName); break;// 血氧
+				case "166":fileWrite = new File("src/srcdata/SpO2/"+ "bf_handle_"+fileName); break;// 血氧
 				default:lineInfo = inInfo.readLine();continue;	// 直接进入下次读取
 				}
 				long startLine = Long.parseLong(arrInfoSplit[6])-1;
@@ -52,6 +57,13 @@ public class SplitFile {
 	       			fos.write("\r\n".getBytes());
  				}
        			fos.close();
+       			
+       			if(arrInfoSplit[1].equals("166")) // 如果是血氧，进一步处理
+       			{
+       				SpO2ChangeDataOrder(fileWrite,fileName);
+       				//使用算法处理文件
+       				SpO2Algorithm(fileName);
+       			}
  				// 读取下一行数据
  				lineInfo = inInfo.readLine();
 				
@@ -59,5 +71,106 @@ public class SplitFile {
 			inInfo.close();
 			inData.close();
 		}		
+	}
+	
+	/**
+	 * 
+	 * @param fileBfHandle
+	 * @param fileName
+	 * @throws IOException
+	 * 生成算法用文件和画图用文件
+	 */
+	private static void SpO2ChangeDataOrder(File fileBfHandle,String fileName) throws IOException
+	{
+		File fileWrite_afHandle; // 算法用文件
+		File fileWrite_draw;     // 画图用文件
+		int i = 0;
+		String[] dataTemp = new String[18];
+		//读入数据
+		BufferedReader bfDataFile = new BufferedReader(new FileReader(fileBfHandle));
+		fileWrite_afHandle = new File("src/srcdata/SpO2/algorithm_" + fileName);
+		fileWrite_draw = new File("src/srcdata/SpO2/" + fileName);
+		// 写入数据
+		FileOutputStream fos =  new FileOutputStream(fileWrite_afHandle);
+		FileOutputStream fos_draw =  new FileOutputStream(fileWrite_draw);
+		
+		 // 写入文件
+		fos_draw.write("SpO2".getBytes());
+		fos_draw.write("\r\n".getBytes());
+		
+		String bfData = bfDataFile.readLine();
+		while(bfData != null)
+		{
+			dataTemp[i] = bfData;
+			i++;
+			if(i == 18) // 正好一组，写入
+			{
+				i = 0;
+				for(int j = 2; j < 10; ++j)
+ 				{
+ 					 // 写入算法用文件
+	       			fos.write(dataTemp[j].getBytes());
+	       			fos.write("\r\n".getBytes());
+	       			fos.write(dataTemp[j+8].getBytes());
+	       			fos.write("\r\n".getBytes());
+	       			
+					 // 写入画图用文件
+	       			fos_draw.write(dataTemp[j].getBytes());
+	       			fos_draw.write("\r\n".getBytes());
+	       			fos_draw.write(dataTemp[j+8].getBytes());
+	       			fos_draw.write("\r\n".getBytes());
+ 				}				
+			}
+			bfData = bfDataFile.readLine();
+		}
+		
+		bfDataFile.close();
+		fos.close();
+		fos_draw.close();
+		fileBfHandle.delete();
+	}
+	
+	/**
+	 * 
+	 * @param fileName
+	 * @throws IOException
+	 * 调用处理算法对采集到的文件进行处理
+	 * @throws MWException 
+	 */
+	private static void SpO2Algorithm(String fileName) throws IOException, MWException
+	{
+		String fileAlgorithmPath = "src/srcdata/SpO2/algorithm_" + fileName;
+		fileAlgorithmPath = fileAlgorithmPath.replace("/", "\\");
+		
+		HRVparameters.Class1 c1 = new HRVparameters.Class1();
+		SpO2_Val_acVdc.Class1 c2 = new SpO2_Val_acVdc.Class1();
+		
+		// 得到了算法的结果
+		Object[] result_HRVparameters= null;
+		Object[] result_SpO2= null;
+		result_HRVparameters = c1.HRVparameters(11,fileAlgorithmPath);
+		result_SpO2 = c2.SpO2_Val_acVdc(1,fileAlgorithmPath);
+		
+		// 将结果写入到文件,用逗号隔开，依次为
+		// SpO2,HI_RATE,LO_RATE,MEAN_RATE,SDNN,R_MSSD,LF,HF,TP, lfnorm ,hfnorm,lf_hf
+		File AlgorithmResult = new File("src/algorithmdata/SpO2/" + fileName);
+		FileOutputStream fos =  new FileOutputStream(AlgorithmResult);
+		
+		fos.write(result_SpO2[0].toString().getBytes());
+		fos.write(",".getBytes());
+		
+		
+		for(int i = 0; i < 11; ++i)
+		{
+			fos.write(result_HRVparameters.toString().getBytes());
+			if(i != 10)
+				fos.write(",".getBytes());
+		}
+		
+		fos.close();
+		// 删除算法用文件
+		File fileAlgorithm = new File("src/srcdata/SpO2/algorithm_" + fileName);
+		fileAlgorithm.delete();
+
 	}
 }

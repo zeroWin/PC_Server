@@ -4,24 +4,21 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.List;
 
 public class writeDataToFile {
 	private static String Path="C:\\Users\\lenovo\\Desktop\\test.txt";
 	private static Object Data ;
 	
 	public writeDataToFile(String Path,Object Data){
-		this.Path=Path;
-		this.Data=Data;
+		writeDataToFile.Path=Path;
+		writeDataToFile.Data=Data;
 	}
 	
 	public writeDataToFile(Object Data){
-		this.Data=Data;
+		writeDataToFile.Data=Data;
 	}
 	
-	public static void writeDataToFile(){
-		
+	public void writeReceiveDataToFile(){
 			File docFile = new File(Path);
 			try {
 			docFile.createNewFile();
@@ -34,8 +31,5 @@ public class writeDataToFile {
 			e.printStackTrace();
 			}
 	}
-//	
-//	public static void main(String[] args){
-//		writeDataToFile();
-//	}
+
 }

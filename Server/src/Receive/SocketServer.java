@@ -111,14 +111,14 @@ public class SocketServer {
 					      	//String File= "D:\\chromedownloads\\new\\new\\measdata.txt";
 					      	String File = "D:\\123.txt";
 							result = c1.Ps(14, File);
-							new writeDataToFile("E:\\x0.txt",result[6]).writeDataToFile();
-							new writeDataToFile("E:\\y0.txt",result[7]).writeDataToFile();
-							new writeDataToFile("E:\\x1.txt",result[8]).writeDataToFile();
-							new writeDataToFile("E:\\y1.txt",result[9]).writeDataToFile();
-							new writeDataToFile("E:\\x2.txt",result[10]).writeDataToFile();
-							new writeDataToFile("E:\\y2.txt",result[11]).writeDataToFile();
-							new writeDataToFile("E:\\x3.txt",result[12]).writeDataToFile();
-							new writeDataToFile("E:\\y3.txt",result[13]).writeDataToFile();
+							new writeDataToFile("E:\\x0.txt",result[6]).writeReceiveDataToFile();
+							new writeDataToFile("E:\\y0.txt",result[7]).writeReceiveDataToFile();
+							new writeDataToFile("E:\\x1.txt",result[8]).writeReceiveDataToFile();
+							new writeDataToFile("E:\\y1.txt",result[9]).writeReceiveDataToFile();
+							new writeDataToFile("E:\\x2.txt",result[10]).writeReceiveDataToFile();
+							new writeDataToFile("E:\\y2.txt",result[11]).writeReceiveDataToFile();
+							new writeDataToFile("E:\\x3.txt",result[12]).writeReceiveDataToFile();
+							new writeDataToFile("E:\\y3.txt",result[13]).writeReceiveDataToFile();
 							
 							System.out.println("“—¥¶¿Ì£°");
 							

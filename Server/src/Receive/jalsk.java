@@ -29,14 +29,14 @@ public static void main(String[] args) throws MWException{
 //			resFinal += "\n";
 //		}
 //		System.out.print(resFinal);
-		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\x0.txt",result[6]).writeDataToFile();
-		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\y0.txt",result[7]).writeDataToFile();
-		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\x1.txt",result[8]).writeDataToFile();
-		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\y1.txt",result[9]).writeDataToFile();
-		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\x2.txt",result[10]).writeDataToFile();
-		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\y2.txt",result[11]).writeDataToFile();
-		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\x3.txt",result[12]).writeDataToFile();
-		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\y3.txt",result[13]).writeDataToFile();
+		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\x0.txt",result[6]).writeReceiveDataToFile();
+		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\y0.txt",result[7]).writeReceiveDataToFile();
+		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\x1.txt",result[8]).writeReceiveDataToFile();
+		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\y1.txt",result[9]).writeReceiveDataToFile();
+		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\x2.txt",result[10]).writeReceiveDataToFile();
+		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\y2.txt",result[11]).writeReceiveDataToFile();
+		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\x3.txt",result[12]).writeReceiveDataToFile();
+		new writeDataToFile("C:\\Users\\lenovo\\Desktop\\y3.txt",result[13]).writeReceiveDataToFile();
 		long endTime = System.currentTimeMillis();
 		System.out.println((endTime-startTime)+"ms");
 	}
