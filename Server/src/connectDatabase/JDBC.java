@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
+import fileHandle.AlgorithmResult;
+
 public class JDBC {
 
 	private String user;
@@ -176,7 +178,7 @@ public class JDBC {
 					for (File a : numOfDic1) // 病人数据
 					{   
 						int count;
-						String[] patientData = a.getName().substring(0, 26).split(",");
+						String[] patientData = a.getName().split(",");
 						String patientUrl = a.getPath();
 						
 						String destUrl = patientUrl.replaceAll("srcdata", "desdata");
@@ -192,10 +194,34 @@ public class JDBC {
 						System.out.print(count);
 						
 
-						String insert_patientData = "insert into PATIENTDATA (ID,PATIENT_ID,DEVICE_TYPE,ACQUISITION_TIME,DOCTOR_ID,ORIGINAL_DATA) values("+"\'"+String.valueOf(count)+"\'"+ ","+"\'" + patientData[0] + "\'"
-								+ "," + "\'" + name + "\'" + "," + "to_date(" + "\'" + patientData[2] + "\'" + ","
+						String insert_patientData = "\'" + patientData[0] + "\'"
+								+ "," + "\'" + name + "\'" + "," + "to_date(" + "\'" + patientData[2].split("\\.")[0] + "\'" + ","
 								+ "'yyyy-mm-dd hh24:mi:ss')" + "," + "\'" + patientData[1] + "\'" + "," + "\'"
-								+ destUrl + "\'" +")";
+								+ destUrl + "\'" + "," +"\'"+String.valueOf(count)+"\'";
+						
+				        switch(name)
+				        {				        
+				        case "SpO2":       	
+				        	String[] SpO2 = AlgorithmResult.GetSpO2Result(a.getName());
+				        	insert_patientData ="insert into DEVICE_INFO(PATIENTID,DEVICE_TYPE,ADDIN_TIME,DOCTORID,ORIGINAL_DATA,IDX,SPO2,HI_RATE,LO_RATE,MEAN_RATE,SDNN,R_MSSD,LF,HF,TP,LFNORM,HFNORM,LF_HF) values("+insert_patientData+ ","
+				        			+"\'" + SpO2[0] + "\'"+ ","+"\'" + SpO2[1] + "\'"+ ","+"\'" + SpO2[2] + "\'"+ ","+"\'" + SpO2[3] + "\'"+ ","+"\'" + SpO2[4] + "\'"+ ","+"\'" + SpO2[5] + "\'"+ ","+"\'" + SpO2[6] + "\'"+ ","
+				        			+"\'" + SpO2[7] + "\'"+ ","+"\'" + SpO2[8] + "\'"+ ","+"\'" + SpO2[9] + "\'"+ ","+"\'" + SpO2[10] + "\'"+ ","+"\'" + SpO2[11] + "\'"+")";				        							        							        			
+				        	break;
+				        case "ECG":
+				        	String[] ECG = AlgorithmResult.GetECGResult(a.getName());
+				        	insert_patientData ="insert into DEVICE_INFO(PATIENTID,DEVICE_TYPE,ADDIN_TIME,DOCTORID,ORIGINAL_DATA,IDX,SPO2,HI_RATE,LO_RATE,MEAN_RATE,SDNN,R_MSSD,LF,HF,TP,LFNORM,HFNORM,LF_HF) values("+insert_patientData+ ","
+		        			+"\'" + ECG[0] + "\'"+ ","+"\'" + ECG[1] + "\'"+ ","+"\'" + ECG[2] + "\'"+ ","+"\'" + ECG[3] + "\'"+ ","+"\'" + ECG[4] + "\'"+ ","+"\'" + ECG[5] + "\'"+ ","+"\'" + ECG[6] + "\'"+ ","
+		        			+"\'" + ECG[7] + "\'"+ ","+"\'" + ECG[8] + "\'"+ ","+"\'" + ECG[9] + "\'"+ ","+"\'" + ECG[10] + "\'"+")";				        							        						
+				        	break;
+				        case "Temper":
+				        	insert_patientData ="insert into DEVICE_INFO(PATIENTID,DEVICE_TYPE,ADDIN_TIME,DOCTORID,ORIGINAL_DATA,IDX,SPO2,HI_RATE,LO_RATE,MEAN_RATE,SDNN,R_MSSD,LF,HF,TP,LFNORM,HFNORM,LF_HF) values("+insert_patientData+")";		        			
+				        	break;
+				        case "BP":
+				        	insert_patientData ="insert into DEVICE_INFO(PATIENTID,DEVICE_TYPE,ADDIN_TIME,DOCTORID,ORIGINAL_DATA,IDX,SPO2,HI_RATE,LO_RATE,MEAN_RATE,SDNN,R_MSSD,LF,HF,TP,LFNORM,HFNORM,LF_HF) values("+insert_patientData+")";		        		
+				        	break;
+				        	default:
+				        		break;				        
+				        }
 						jDBC.insert(insert_patientData);// 插入成功
 						patientData = null;// 清空buff接收下次
 					}
