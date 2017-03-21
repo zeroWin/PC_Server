@@ -4,7 +4,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
@@ -12,11 +11,10 @@
 hs_err_pid*
 
 # ignore txt
-srcdata/
-desdata/
 .metadata/
 .recommenders/
 RemoteSystemsTempFiles/
+a/
 
 # =========================
 # Operating System Files
